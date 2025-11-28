@@ -14,7 +14,7 @@ except:
 
 # ===============================================================
 
-TOKEN = "COLOQUE_SEU_TOKEN_AQUI"  # NÃO ME ENVIE ESSE TOKEN
+TOKEN = "8563989647:AAErWElimxs_A-m6tDXhbLp3wSIvGMmm9IA"  # NÃO ME ENVIE ESSE TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
