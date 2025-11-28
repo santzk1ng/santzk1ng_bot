@@ -1,4 +1,6 @@
 pyTelegramBotAPI==4.14.0
+google-cloud-vision==3.7.2
+google-auth==2.35.0
+google-auth-oauthlib==1.2.1
+google-auth-httplib2==0.2.0
 requests
-pytesseract
-Pillow
