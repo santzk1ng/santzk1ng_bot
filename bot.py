@@ -3,7 +3,7 @@ import easyocr
 from PIL import Image
 import io
 
-TOKEN = "SEU_TOKEN_AQUI"
+TOKEN = "8563989647:AAGuEH-4Q99pqGzeaLuVTv0uYm-jS-kZyco"
 
 bot = telebot.TeleBot(TOKEN)
 ocr = easyocr.Reader(['pt'])  # OCR em português
