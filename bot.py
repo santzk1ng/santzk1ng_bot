@@ -1,15 +1,16 @@
 import telebot
-import pytesseract
+import easyocr
 from PIL import Image
 import io
 
-TOKEN = "COLOQUE_AQUI_SEU_TOKEN_SEM_ME_ENVIAR"
+TOKEN = "SEU_TOKEN_AQUI"
 
 bot = telebot.TeleBot(TOKEN)
+ocr = easyocr.Reader(['pt'])  # OCR em português
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "Fala irmão, manda o print que eu leio tudo pra tu!")
+    bot.send_message(message.chat.id, "Fala irmão! Manda o print que eu leio tudo pra tu!")
 
 @bot.message_handler(content_types=['photo'])
 def handle_photo(message):
@@ -19,7 +20,9 @@ def handle_photo(message):
 
         img = Image.open(io.BytesIO(downloaded))
 
-        text = pytesseract.image_to_string(img, lang='por')
+        result = ocr.readtext(downloaded, detail=0)
+
+        text = "\n".join(result)
 
         bot.send_message(message.chat.id, "Extraí isso do print:\n\n" + text)
 
@@ -31,5 +34,3 @@ def echo(message):
     bot.send_message(message.chat.id, "Manda a imagem do resultado que eu faço a leitura.")
 
 bot.polling()
-
-
