@@ -1,23 +1,35 @@
 import telebot
+import pytesseract
+from PIL import Image
+import io
 
-TOKEN = "8563989647:AAFQXyZltk7T4-GugA7UY_pcP4RRDmnNCYA"
+TOKEN = "COLOQUE_AQUI_SEU_TOKEN_SEM_ME_ENVIAR"
 
 bot = telebot.TeleBot(TOKEN)
 
-# Comando /start
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "Fala irmão, o bot do santzk1ng tá ON!")
+    bot.send_message(message.chat.id, "Fala irmão, manda o print que eu leio tudo pra tu!")
 
-# Receber FOTO
 @bot.message_handler(content_types=['photo'])
-def photo_handler(message):
-    bot.send_message(message.chat.id, "Recebi a imagem irmão!")
+def handle_photo(message):
+    try:
+        file_info = bot.get_file(message.photo[-1].file_id)
+        downloaded = bot.download_file(file_info.file_path)
 
-# Responder qualquer TEXTO
-@bot.message_handler(func=lambda m: True, content_types=['text'])
+        img = Image.open(io.BytesIO(downloaded))
+
+        text = pytesseract.image_to_string(img, lang='por')
+
+        bot.send_message(message.chat.id, "Extraí isso do print:\n\n" + text)
+
+    except Exception as e:
+        bot.send_message(message.chat.id, f"Erro ao processar a imagem: {e}")
+
+@bot.message_handler(func=lambda m: True)
 def echo(message):
-    bot.send_message(message.chat.id, f"Recebi: {message.text}")
+    bot.send_message(message.chat.id, "Manda a imagem do resultado que eu faço a leitura.")
 
 bot.polling()
+
 
