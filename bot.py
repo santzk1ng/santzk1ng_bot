@@ -1,16 +1,26 @@
 import telebot
-import easyocr
+import pytesseract
 from PIL import Image
 import io
+import subprocess
 
-TOKEN = "8563989647:AAGuEH-4Q99pqGzeaLuVTv0uYm-jS-kZyco"
+# ============= INSTALAR TESSERACT NO SERVIDOR =================
+
+try:
+    subprocess.run(["tesseract", "-v"], check=True)
+except:
+    subprocess.run(["apt-get", "update"])
+    subprocess.run(["apt-get", "install", "-y", "tesseract-ocr", "tesseract-ocr-por"])
+
+# ===============================================================
+
+TOKEN = "COLOQUE_SEU_TOKEN_AQUI"  # NÃO ME ENVIE ESSE TOKEN
 
 bot = telebot.TeleBot(TOKEN)
-ocr = easyocr.Reader(['pt'])  # OCR em português
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "Fala irmão! Manda o print que eu leio tudo pra tu!")
+    bot.send_message(message.chat.id, "Fala irmão, manda o print que eu leio tudo pra tu!")
 
 @bot.message_handler(content_types=['photo'])
 def handle_photo(message):
@@ -20,9 +30,7 @@ def handle_photo(message):
 
         img = Image.open(io.BytesIO(downloaded))
 
-        result = ocr.readtext(downloaded, detail=0)
-
-        text = "\n".join(result)
+        text = pytesseract.image_to_string(img, lang='por')
 
         bot.send_message(message.chat.id, "Extraí isso do print:\n\n" + text)
 
@@ -33,4 +41,4 @@ def handle_photo(message):
 def echo(message):
     bot.send_message(message.chat.id, "Manda a imagem do resultado que eu faço a leitura.")
 
-bot.polling()
+bot.polling(none_stop=True)
