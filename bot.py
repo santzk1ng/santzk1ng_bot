@@ -14,7 +14,8 @@ except:
 
 # ===============================================================
 
-TOKEN = "8563989647:AAErWElimxs_A-m6tDXhbLp3wSIvGMmm9IA"  # NÃO ME ENVIE ESSE TOKEN
+import os
+TOKEN = os.getenv("TOKEN8563989647:AAErWElimxs_A-m6tDXhbLp3wSIvGMmm9IA") # NÃO ME ENVIE ESSE TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
